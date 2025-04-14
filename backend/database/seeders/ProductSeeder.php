@@ -2,36 +2,146 @@
 
 namespace Database\Seeders;
 
-
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
-class ProductSeeder extends Seeder {
-    public function run() {
-        DB::table('products')->insert([
-            // PC Store
-            ['store_id' => 1, 'name' => 'RTX 4060', 'description' => 'GPU terbaru untuk gaming PC.', 'price' => 8000000, 'image' => 'images/products/rtx4060.jpg'],
-            ['store_id' => 1, 'name' => 'Intel i7 12700K', 'description' => 'Prosesor high-performance.', 'price' => 6500000, 'image' => 'images/products/i712700k.jpg'],
+class ProductSeeder extends Seeder
+{
+    public function run()
+    {
+        $products = [
+            // Action Games
+            [
+                'name' => 'God of War',
+                'description' => 'Epic action-adventure game',
+                'price' => 599000,
+                'image' => 'god-of-war.jpg',
+                'category_id' => 1,
+                'slug' => 'god-of-war',
+                'platform' => 'PS5, PC',
+                'developer' => 'Santa Monica Studio',
+                'publisher' => 'Sony Interactive Entertainment',
+                'release_date' => '2022-01-14'
+            ],
+            [
+                'name' => 'Devil May Cry 5',
+                'description' => 'Stylish action combat game',
+                'price' => 499000,
+                'image' => 'dmc5.jpg',
+                'category_id' => 1,
+                'slug' => 'devil-may-cry-5',
+                'platform' => 'PS5, Xbox Series X, PC',
+                'developer' => 'Capcom',
+                'publisher' => 'Capcom',
+                'release_date' => '2019-03-08'
+            ],
+            
+            // Adventure Games
+            [
+                'name' => 'Uncharted 4',
+                'description' => 'Action-adventure exploration game',
+                'price' => 399000,
+                'image' => 'uncharted4.jpg',
+                'category_id' => 2,
+                'slug' => 'uncharted-4',
+                'platform' => 'PS5, PC',
+                'developer' => 'Naughty Dog',
+                'publisher' => 'Sony Interactive Entertainment',
+                'release_date' => '2016-05-10'
+            ],
+            [
+                'name' => 'Red Dead Redemption 2',
+                'description' => 'Open-world western adventure',
+                'price' => 699000,
+                'image' => 'rdr2.jpg',
+                'category_id' => 2,
+                'slug' => 'red-dead-redemption-2',
+                'platform' => 'PS5, Xbox Series X, PC',
+                'developer' => 'Rockstar Games',
+                'publisher' => 'Rockstar Games',
+                'release_date' => '2018-10-26'
+            ],
 
-            // Console Store
-            ['store_id' => 2, 'name' => 'Xbox Series X', 'description' => 'Konsol terbaru dari Microsoft.', 'price' => 7500000, 'image' => 'images/products/xboxseriesx.jpg'],
-            ['store_id' => 2, 'name' => 'Nintendo Switch OLED', 'description' => 'Konsol portable dengan layar OLED.', 'price' => 5500000, 'image' => 'images/products/switch_oled.jpg'],
+            // RPG Games
+            [
+                'name' => 'Final Fantasy VII Remake',
+                'description' => 'Epic RPG adventure',
+                'price' => 799000,
+                'image' => 'ff7r.jpg',
+                'category_id' => 3,
+                'slug' => 'final-fantasy-vii-remake',
+                'platform' => 'PS5, PC',
+                'developer' => 'Square Enix',
+                'publisher' => 'Square Enix',
+                'release_date' => '2020-04-10'
+            ],
+            [
+                'name' => 'The Witcher 3',
+                'description' => 'Open-world action RPG',
+                'price' => 299000,
+                'image' => 'witcher3.jpg',
+                'category_id' => 3,
+                'slug' => 'the-witcher-3',
+                'platform' => 'PS5, Xbox Series X, PC',
+                'developer' => 'CD Projekt Red',
+                'publisher' => 'CD Projekt',
+                'release_date' => '2015-05-19'
+            ],
 
-            // PlayStation Store
-            ['store_id' => 3, 'name' => 'PlayStation 5', 'description' => 'Konsol generasi terbaru Sony.', 'price' => 8000000, 'image' => 'images/products/ps5.jpg'],
-            ['store_id' => 3, 'name' => 'DualSense Controller', 'description' => 'Kontroler wireless PS5.', 'price' => 1200000, 'image' => 'images/products/dualsense.jpg'],
+            // Strategy Games
+            [
+                'name' => 'Civilization VI',
+                'description' => '4X strategy game',
+                'price' => 399000,
+                'image' => 'civ6.jpg',
+                'category_id' => 4,
+                'slug' => 'civilization-vi',
+                'platform' => 'PC',
+                'developer' => 'Firaxis Games',
+                'publisher' => '2K Games',
+                'release_date' => '2016-10-21'
+            ],
+            [
+                'name' => 'Age of Empires IV',
+                'description' => 'Real-time strategy game',
+                'price' => 499000,
+                'image' => 'aoe4.jpg',
+                'category_id' => 4,
+                'slug' => 'age-of-empires-iv',
+                'platform' => 'PC',
+                'developer' => 'Relic Entertainment',
+                'publisher' => 'Xbox Game Studios',
+                'release_date' => '2021-10-28'
+            ],
 
-            // Handphone Store
-            ['store_id' => 4, 'name' => 'ROG Phone 7', 'description' => 'HP gaming flagship dari Asus.', 'price' => 10000000, 'image' => 'images/products/rogphone7.jpg'],
-            ['store_id' => 4, 'name' => 'Black Shark 5 Pro', 'description' => 'HP gaming dengan performa tinggi.', 'price' => 9500000, 'image' => 'images/products/blackshark5pro.jpg'],
+            // Sports Games
+            [
+                'name' => 'FIFA 23',
+                'description' => 'Football simulation game',
+                'price' => 699000,
+                'image' => 'fifa23.jpg',
+                'category_id' => 5,
+                'slug' => 'fifa-23',
+                'platform' => 'PS5, Xbox Series X, PC',
+                'developer' => 'EA Vancouver',
+                'publisher' => 'EA Sports',
+                'release_date' => '2022-09-30'
+            ],
+            [
+                'name' => 'NBA 2K23',
+                'description' => 'Basketball simulation game',
+                'price' => 699000,
+                'image' => 'nba2k23.jpg',
+                'category_id' => 5,
+                'slug' => 'nba-2k23',
+                'platform' => 'PS5, Xbox Series X, PC',
+                'developer' => 'Visual Concepts',
+                'publisher' => '2K Sports',
+                'release_date' => '2022-09-09'
+            ],
+        ];
 
-            // Game Console Store
-            ['store_id' => 5, 'name' => 'Elden Ring (Xbox)', 'description' => 'Game RPG open world untuk Xbox.', 'price' => 800000, 'image' => 'images/products/eldenring_xbox.jpg'],
-            ['store_id' => 5, 'name' => 'Halo Infinite (Xbox)', 'description' => 'Game FPS eksklusif Xbox.', 'price' => 700000, 'image' => 'images/products/haloinfinite_xbox.jpg'],
-
-            // Game PlayStation Store
-            ['store_id' => 6, 'name' => 'God of War Ragnarok', 'description' => 'Game action PS5 terbaik.', 'price' => 900000, 'image' => 'images/products/gow_ragnarok.jpg'],
-            ['store_id' => 6, 'name' => 'The Last of Us Part II', 'description' => 'Game petualangan PS.', 'price' => 750000, 'image' => 'images/products/tlou2.jpg'],
-        ]);
+        DB::table('products')->insert($products);
     }
 }

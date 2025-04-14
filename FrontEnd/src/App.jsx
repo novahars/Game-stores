@@ -7,11 +7,17 @@ import {
   Outline,
   Selection,
 } from "@react-three/postprocessing";
-import Content from "./Content";
+import Content from "./contents/Content";
 import Utils from "./Utils";
 import Experience from "./Experience";
 import { CameraProvider } from "./contexts/CameraContext";
 import CameraControll from "./models/CameraControll";
+import HamburgerMenu from "./component/HamburgerMenu";
+import Navigation from "./navigation/Navigation";
+import LoginRegisterModal from './component/LoginRegister';
+import { useAutoModal } from "./hooks/useAutoModal";
+import * as THREE from "three";
+
 
 export const ContentContext = createContext();
 
@@ -27,6 +33,12 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [startZoom, setStartZoom] = useState(false);
   const [sections, setSections] = useState([]); // State buat simpan data dari API
+  const { showModal, setShowModal } = useAutoModal();
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
 
   useEffect(() => {
     let interval = null;
@@ -56,12 +68,7 @@ export default function App() {
     });
   }, []);
 
-  useEffect(() => {
-    fetch("https://api.example.com/sections") // Ganti dengan endpoint API lo
-      .then((response) => response.json())
-      .then((data) => setSections(data))
-      .catch((error) => console.error("Error fetching sections:", error));
-  }, []);
+
 
   const controls = CameraControll(/* pass necessary parameters here */);
 
@@ -69,9 +76,20 @@ export default function App() {
     <ContentContext.Provider value={{ data, setData, sections }}>
       <CameraProvider controls={controls}>
         <div className="relative w-full h-screen">
+          {showModal && (
+            <LoginRegisterModal
+              onClose={() => setShowModal(false)}
+              onLoginSuccess={(user) => {
+                setShowModal(false);
+                // Handle login success
+              }}
+            />
+          )}
+          <HamburgerMenu onToggle={toggleNav} />
+          <Navigation isOpen={isNavOpen} />
           {showLoadingScreen && <LoadingScreen sky={sky} loadingComplete={!showLoadingScreen} />}
           <Suspense fallback={null}>
-            <div className="relative w-full h-full">
+            <div className={`relative w-full h-full ${isNavOpen ? 'z-[-1]' : 'z-0'}`}>
               <Canvas camera={{ position: [0, 5, 1000], fov: 75 }} className="absolute w-full h-full">
                 <Selection>
                   <EffectComposer multisampling={8} autoClear={false}>
