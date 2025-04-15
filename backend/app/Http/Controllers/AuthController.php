@@ -2,94 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Register a new user.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
         ]);
 
         $user = User::create([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'role'     => 'user',
         ]);
 
         return response()->json([
-            'message' => 'Registration successful',
-            'user'    => $user
+            'message' => 'Registered successfully',
+            'user'    => $user,
         ], 201);
     }
 
-    /**
-     * Log in an existing user.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function login(Request $request)
     {
-        $validated = $request->validate([
-            'email'    => 'required|string|email',
-            'password' => 'required|string',
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
-        $user = User::where('email', $validated['email'])->first();
+        $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
-            return response()->json([
-                'message' => 'Login failed: incorrect credentials',
-            ], 401);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
+
+        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
+            'token'   => $token,
             'message' => 'Login successful',
-            'user'    => $user,
-        ], 200);
+        ]);
     }
 
-    /**
-     * Check if a user exists via query parameter (?id=...).
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function checkUser(Request $request)
+    public function me(Request $request)
     {
-        $id = $request->query('id');
+        return response()->json([
+            'id'    => $request->user()->id,
+            'name'  => $request->user()->name,
+            'email' => $request->user()->email,
+            'role'  => $request->user()->role,
+        ]);
+    }
 
-        if (!$id) {
-            return response()->json([
-                'exists'  => false,
-                'message' => 'User ID not provided!',
-            ], 400);
-        }
-
-        $user = User::find($id);
-
-        if ($user) {
-            return response()->json([
-                'exists' => true,
-                'user'   => $user,
-            ], 200);
-        } else {
-            return response()->json([
-                'exists'  => false,
-                'message' => 'User not found!',
-            ], 404);
-        }
+    public function adminOnly(Request $request)
+    {
+        return response()->json(['message' => 'Hello Admin!']);
     }
 }
