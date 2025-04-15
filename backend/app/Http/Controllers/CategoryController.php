@@ -9,45 +9,61 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        return response()->json($categories);
+        try {
+            $categories = Category::all();
+            return response()->json($categories);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch categories'], 500);
+        }
     }
 
     public function products($key)
     {
-        $category = Category::where('key', $key)->first();
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
+        try {
+            $category = Category::where('key', $key)->first();
+            
+            if (!$category) {
+                return response()->json(['error' => 'Category not found'], 404);
+            }
+
+            $products = $category->products()->with('category')->get();
+            
+            return response()->json([
+                'category' => $category,
+                'products' => $products
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch products'], 500);
         }
-        
-        $products = $category->products;
-        return response()->json($products);
     }
 
     public function findByKey($key)
     {
+        try {
+            $category = Category::where('key', $key)->first();
+            
+            if (!$category) {
+                return response()->json(['error' => 'Category not found'], 404);
+            }
 
-        // Convert to lowercase for case-insensitive comparison
-        $normalizedKey = strtolower($key);
-        
-        $category = Category::whereRaw('LOWER(key) = ?', [$normalizedKey])->first();
-
-        if (!$category) {
-            return response()->json(['error' => 'Category not found'], 404);
+            return response()->json($category);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch category'], 500);
         }
-
-        return response()->json($category);
     }
 
     public function getProducts($id)
     {
-        $category = Category::find($id);
-        
-        if (!$category) {
-            return response()->json(['error' => 'Category not found'], 404);
+        try {
+            $category = Category::findOrFail($id);
+            $products = $category->products()->with('category')->get();
+            
+            return response()->json([
+                'category' => $category,
+                'products' => $products
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch products'], 500);
         }
-
-        $products = $category->products;
-        return response()->json($products);
     }
 }
