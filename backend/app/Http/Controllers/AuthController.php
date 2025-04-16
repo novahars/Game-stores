@@ -52,4 +52,36 @@ class AuthController extends Controller
             'message' => 'Login successful',
         ]);
     }
+
+    /**
+     * Check if a user exists via query parameter (?id=...).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkUser(Request $request)
+    {
+        $id = $request->query('id');
+
+        if (!$id) {
+            return response()->json([
+                'exists'  => false,
+                'message' => 'User ID not provided!',
+            ], 400);
+        }
+
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json([
+                'exists' => true,
+                'user'   => $user,
+            ], 200);
+        } else {
+            return response()->json([
+                'exists'  => false,
+                'message' => 'User not found!',
+            ], 404);
+        }
+    }
 }
