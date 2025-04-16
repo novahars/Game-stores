@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { ContentContext } from "../App";
 import LoginRegisterModal from "../component/LoginRegister";
 import Modal from "../component/Content/Modal";
 import ProductGrid from "../component/Content/ProductGrid";
 import TransactionModal from "../component/Content/TransactionModal";
+import { ContentContext } from "../Home";
+import axios from "axios";
 
 export default function Content() {
   const { data, setData } = useContext(ContentContext);
@@ -31,10 +32,10 @@ export default function Content() {
 
   // Fetch categories
   useEffect(() => {
-    fetch("http://localhost:8000/api/categories")
-      .then((response) => response.json())
-      .then((apiCategories) => setSections(apiCategories))
-      .catch((error) => console.error("Error fetching categories:", error));
+    axios
+      .get("/categories")
+      .then((res) => setSections(res.data))
+      .catch((err) => console.error("Error fetching categories:", err));
   }, []);
 
   // Handle mobile view
@@ -75,23 +76,19 @@ export default function Content() {
   }, [data.boolean, data.value, sections, hasScrolled]);
 
   // Fetch products when full screen modal is shown
+  // Fetch products when full screen modal is shown and a category is selected
   useEffect(() => {
     if (isFullScreen && data.value) {
       const category = sections.find((c) => c.key === data.value);
       if (category) {
-        fetch(`http://localhost:8000/api/categories/${category.key}/products`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
+        axios
+          .get(`/categories/key/${category.key}`) // Mengambil produk berdasarkan key kategori
+          .then((res) => {
+            // Menyimpan produk yang diambil sesuai dengan kategori
+            setProducts(res.data.products);
           })
-          .then((productsData) => {
-            console.log('Products fetched:', productsData);
-            setProducts(productsData.products || []);
-          })
-          .catch((error) => {
-            console.error("Error fetching products:", error);
+          .catch((err) => {
+            console.error("Error fetching products:", err);
           });
       }
     }
@@ -130,7 +127,10 @@ export default function Content() {
         body: JSON.stringify(payload),
       });
       const result = await response.json();
-      setTransactionMessage(result.message || (response.ok ? "Transaksi berhasil" : "Transaksi gagal"));
+      setTransactionMessage(
+        result.message ||
+          (response.ok ? "Transaksi berhasil" : "Transaksi gagal")
+      );
       setTransactionModal(true);
       setTimeout(() => setTransactionModal(false), 120000);
     } catch (error) {

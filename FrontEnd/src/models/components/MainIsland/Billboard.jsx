@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { useRef, useContext, useState, useEffect } from "react";
-import { ContentContext } from "../../../App";
+import { ContentContext } from "../../../Home";
 import { useThree } from "@react-three/fiber";
 import { Box3, Vector3 } from "three";
 import { Select } from "@react-three/postprocessing";

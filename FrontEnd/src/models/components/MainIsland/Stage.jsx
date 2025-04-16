@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { useRef, useContext, useState, useEffect } from "react";
 import { Raycaster, Vector2 } from "three";
-import { ContentContext } from "../../../App";
+import { ContentContext } from "../../../Home";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import { Box3, Vector3 } from "three";
