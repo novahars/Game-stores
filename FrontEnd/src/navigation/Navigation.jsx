@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import LoginRegister from '../component/LoginRegister';
+import LoginRegisterModal from '../component/LoginRegister';
 
 const Navigation = ({ isOpen }) => {
     const [showLoginModal, setShowLoginModal] = useState(false);

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { useRef, useContext, useState, useEffect } from "react";
-import { ContentContext } from "../../../App";
+import { ContentContext } from "../../../Home";
 import { useThree } from "@react-three/fiber";
 import { Box3, Vector3 } from "three";
 import { Select } from "@react-three/postprocessing";
@@ -8,11 +8,7 @@ import CameraControl from "../../CameraControll";
 import { Html } from "@react-three/drei";
 
 const content = {
-  key: "game_ps",  // Menggunakan key "game_ps"
-  title: "DIGITAL MARKETING",
-  description: `
-    Leveraging online platforms to promote brands and drive growth through measurable strategies.
-  `,
+  key: "game_ps", 
 };
 export default function FerrisWheel({ nodes, materials, loadingComplete }) {
   const [hovered, hover] = useState(false);

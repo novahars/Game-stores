@@ -1,16 +1,12 @@
 import { useRef, useContext, useState, useEffect } from "react";
-import { ContentContext } from "../../../App";
+import { ContentContext } from "../../../Home";
 import { useThree } from "@react-three/fiber";
 import { Select } from "@react-three/postprocessing";
 import { Float, Html } from "@react-three/drei";
 import CameraControl from "../../CameraControll";
 
 const content = {
-  key: "handphones",  // Menyesuaikan dengan key "handphones"
-  title: "CONTENT MARKETING and CREATIVE WORKS",
-  description: `
-    Crafting engaging, value-driven content to connect with audiences and build brand awareness.
-  `,
+  key: "handphones"
 };
 
 

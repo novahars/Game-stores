@@ -1,6 +1,6 @@
 import { useRef, useContext, useState, useEffect } from "react";
 import { Raycaster, Vector2 } from "three";
-import { ContentContext } from "../../../App";
+import { ContentContext } from "../../../Home";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import { Box3, Vector3 } from "three";
@@ -9,11 +9,7 @@ import CameraControl from "../../CameraControll";
 import { Html } from "@react-three/drei";
 
 const content = {
-  key: "console",  // Sesuai dengan key "console" di StoreSeeder
-  title: "BRAND STRATEGY and ACTIVATION",
-  description: `
-    A comprehensive approach to define a brand's identity, position it in the market, and engage audiences through impactful campaigns.
-  `,
+  key: "console"
 };
 
 

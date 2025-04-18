@@ -2,146 +2,57 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        $products = [
-            // Action Games
+        $games = [
             [
-                'name' => 'God of War',
-                'description' => 'Epic action-adventure game',
-                'price' => 599000,
-                'image' => 'god-of-war.jpg',
-                'category_id' => 1,
-                'slug' => 'god-of-war',
-                'platform' => 'PS5, PC',
-                'developer' => 'Santa Monica Studio',
-                'publisher' => 'Sony Interactive Entertainment',
-                'release_date' => '2022-01-14'
+                'categories_id' => 1, 
+                'name' => 'Call of Duty: Modern Warfare',
+                'description' => 'First-person shooter set in modern conflict.',
+                'slug' => Str::slug('Call of Duty: Modern Warfare'),
+                'platform' => 'PC',
+                'developer' => 'Infinity Ward',
+                'publisher' => 'Activision',
+                'release_date' => '2019-10-25',
+                'price' => 59.99,
+                'image' => 'https://upload.wikimedia.org/wikipedia/en/6/6f/Call_of_Duty_Modern_Warfare.jpg',
             ],
             [
-                'name' => 'Devil May Cry 5',
-                'description' => 'Stylish action combat game',
-                'price' => 499000,
-                'image' => 'dmc5.jpg',
-                'category_id' => 1,
-                'slug' => 'devil-may-cry-5',
-                'platform' => 'PS5, Xbox Series X, PC',
-                'developer' => 'Capcom',
-                'publisher' => 'Capcom',
-                'release_date' => '2019-03-08'
-            ],
-            
-            // Adventure Games
-            [
-                'name' => 'Uncharted 4',
-                'description' => 'Action-adventure exploration game',
-                'price' => 399000,
-                'image' => 'uncharted4.jpg',
-                'category_id' => 2,
-                'slug' => 'uncharted-4',
-                'platform' => 'PS5, PC',
-                'developer' => 'Naughty Dog',
-                'publisher' => 'Sony Interactive Entertainment',
-                'release_date' => '2016-05-10'
+                'categories_id' => 2, // Adventure Games
+                'name' => 'The Legend of Zelda: Breath of the Wild',
+                'description' => 'Open-world adventure game full of puzzles and exploration.',
+                'slug' => Str::slug('The Legend of Zelda: Breath of the Wild'),
+                'platform' => 'Nintendo Switch',
+                'developer' => 'Nintendo EPD',
+                'publisher' => 'Nintendo',
+                'release_date' => '2017-03-03',
+                'price' => 59.99,
+                'image' => 'https://upload.wikimedia.org/wikipedia/en/0/0b/The_Legend_of_Zelda_Breath_of_the_Wild.jpg',
             ],
             [
-                'name' => 'Red Dead Redemption 2',
-                'description' => 'Open-world western adventure',
-                'price' => 699000,
-                'image' => 'rdr2.jpg',
-                'category_id' => 2,
-                'slug' => 'red-dead-redemption-2',
-                'platform' => 'PS5, Xbox Series X, PC',
-                'developer' => 'Rockstar Games',
-                'publisher' => 'Rockstar Games',
-                'release_date' => '2018-10-26'
-            ],
-
-            // RPG Games
-            [
-                'name' => 'Final Fantasy VII Remake',
-                'description' => 'Epic RPG adventure',
-                'price' => 799000,
-                'image' => 'ff7r.jpg',
-                'category_id' => 3,
-                'slug' => 'final-fantasy-vii-remake',
-                'platform' => 'PS5, PC',
-                'developer' => 'Square Enix',
-                'publisher' => 'Square Enix',
-                'release_date' => '2020-04-10'
-            ],
-            [
-                'name' => 'The Witcher 3',
-                'description' => 'Open-world action RPG',
-                'price' => 299000,
-                'image' => 'witcher3.jpg',
-                'category_id' => 3,
-                'slug' => 'the-witcher-3',
-                'platform' => 'PS5, Xbox Series X, PC',
+                'categories_id' => 3, // RPG Games
+                'name' => 'The Witcher 3: Wild Hunt',
+                'description' => 'Story-rich RPG with monster hunting and branching quests.',
+                'slug' => Str::slug('The Witcher 3: Wild Hunt'),
+                'platform' => 'PC, PS4, Xbox One',
                 'developer' => 'CD Projekt Red',
                 'publisher' => 'CD Projekt',
-                'release_date' => '2015-05-19'
-            ],
-
-            // Strategy Games
-            [
-                'name' => 'Civilization VI',
-                'description' => '4X strategy game',
-                'price' => 399000,
-                'image' => 'civ6.jpg',
-                'category_id' => 4,
-                'slug' => 'civilization-vi',
-                'platform' => 'PC',
-                'developer' => 'Firaxis Games',
-                'publisher' => '2K Games',
-                'release_date' => '2016-10-21'
-            ],
-            [
-                'name' => 'Age of Empires IV',
-                'description' => 'Real-time strategy game',
-                'price' => 499000,
-                'image' => 'aoe4.jpg',
-                'category_id' => 4,
-                'slug' => 'age-of-empires-iv',
-                'platform' => 'PC',
-                'developer' => 'Relic Entertainment',
-                'publisher' => 'Xbox Game Studios',
-                'release_date' => '2021-10-28'
-            ],
-
-            // Sports Games
-            [
-                'name' => 'FIFA 23',
-                'description' => 'Football simulation game',
-                'price' => 699000,
-                'image' => 'fifa23.jpg',
-                'category_id' => 5,
-                'slug' => 'fifa-23',
-                'platform' => 'PS5, Xbox Series X, PC',
-                'developer' => 'EA Vancouver',
-                'publisher' => 'EA Sports',
-                'release_date' => '2022-09-30'
-            ],
-            [
-                'name' => 'NBA 2K23',
-                'description' => 'Basketball simulation game',
-                'price' => 699000,
-                'image' => 'nba2k23.jpg',
-                'category_id' => 5,
-                'slug' => 'nba-2k23',
-                'platform' => 'PS5, Xbox Series X, PC',
-                'developer' => 'Visual Concepts',
-                'publisher' => '2K Sports',
-                'release_date' => '2022-09-09'
+                'release_date' => '2015-05-19',
+                'price' => 39.99,
+                'image' => 'https://upload.wikimedia.org/wikipedia/en/0/0c/Witcher_3_cover_art.jpg',
             ],
         ];
 
-        DB::table('products')->insert($products);
+        Product::insert($games);
     }
 }
